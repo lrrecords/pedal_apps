@@ -645,7 +645,11 @@
       nm.addEventListener('click', function () { loadUserPreset(p); });
       var x = el('button', { class: 'x', type: 'button', title: 'Delete', 'aria-label': 'Delete ' + p.name }, '×');
       x.addEventListener('click', function () {
-        if (!confirm('Delete "' + p.name + '"?')) return;
+        if (!x.dataset.armed) {
+          x.dataset.armed = '1'; x.textContent = 'SURE?'; x.style.fontSize = '11px';
+          setTimeout(function () { delete x.dataset.armed; x.textContent = '\u00d7'; x.style.fontSize = ''; }, 3000);
+          return;
+        }
         store().remove(state.device.id, p.id).then(refreshPresets).then(function () { toast('Deleted'); }).catch(function (e) { toast(e.message || 'Delete failed', true); });
       });
       item.appendChild(nm); item.appendChild(x); box.appendChild(item);
@@ -693,11 +697,17 @@
 
   $('resetBtn').addEventListener('click', function () { applyValues({}, 'MODE: MANUAL'); $('presetSel').value = ''; });
 
+  var pendingOverwrite = null;
+  $('presetName').addEventListener('input', function () { pendingOverwrite = null; });
   $('saveBtn').addEventListener('click', function () {
     var name = $('presetName').value.trim().replace(/\s+/g, ' ');
     if (!name) { toast('Enter a name first!', true); $('presetName').focus(); return; }
     var exists = state.presets.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
-    if (exists && !confirm('Overwrite your preset "' + name + '"?')) return;
+    if (exists && pendingOverwrite !== name.toLowerCase()) {
+      pendingOverwrite = name.toLowerCase();
+      toast('"' + name + '" exists - click SAVE again to overwrite'); return;
+    }
+    pendingOverwrite = null;
     var btn = this; btn.disabled = true;
     store().save(state.device.id, name, Object.assign({}, state.values))
       .then(refreshPresets)
