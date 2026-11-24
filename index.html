@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bent Tree Tone Lab - Pedal &amp; Amp Settings</title>
+</head>
+<body>
+<!--
+  ============================================================
+  BENT TREE TONE LAB  (pedal_apps)
+  Everything from <div id="btlab"> down to the closing </script>
+  is self-contained, so you can paste it into an EasyFunnels
+  "Custom HTML / Code" element. All styles are scoped to #btlab
+  so they won't restyle the rest of the page.
+
+  To switch on logins + cloud presets + feedback, fill in CONFIG
+  below (see README.md and supabase/schema.sql).
+  ============================================================
+-->
+<div id="btlab">
+<style>
+#btlab{--bg:#121212;--panel:#1a1a1a;--line:#333;--silver:#c0c0c0;--blue:#00ccff;--green:#76b900;--red:#ff2a2a;--muted:#777;
+  font-family:'Courier New',Courier,monospace;background:var(--bg);color:var(--silver);padding:32px 16px 48px;line-height:1.4}
+#btlab *{box-sizing:border-box}
+#btlab .wrap{max-width:1000px;margin:0 auto}
+#btlab button,#btlab input,#btlab select,#btlab textarea{font-family:inherit;font-size:14px}
+#btlab .hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+#btlab .hdr h1{margin:0;font-size:2.4rem;color:#fff;letter-spacing:4px;text-shadow:0 0 10px var(--blue)}
+#btlab .brand{display:inline-block;margin-top:8px;color:var(--green);border:1px solid var(--green);padding:4px 12px;font-weight:bold;letter-spacing:2px;font-size:.85rem}
+#btlab .acct{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px}
+#btlab .acct .who{color:var(--blue)}
+#btlab .btn{background:#333;color:#fff;border:1px solid #555;padding:9px 16px;border-radius:4px;cursor:pointer;transition:all .15s}
+#btlab .btn:hover{background:#444;border-color:#777}
+#btlab .btn.go{background:var(--green);color:#000;border:none;font-weight:bold}
+#btlab .btn.go:hover{background:#8ae600}
+#btlab .btn.ghost{background:none}
+#btlab .btn.sm{padding:5px 10px;font-size:12px}
+#btlab .btn[disabled]{opacity:.45;cursor:not-allowed}
+#btlab .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+#btlab .tab{background:none;border:1px solid var(--line);color:var(--muted);padding:9px 18px;border-radius:4px;cursor:pointer;letter-spacing:2px;font-weight:bold}
+#btlab .tab[aria-selected="true"]{border-color:var(--blue);color:var(--blue);box-shadow:0 0 8px rgba(0,204,255,.25)}
+#btlab .chips{display:flex;gap:6px;margin-left:auto}
+#btlab .chip{background:none;border:1px solid var(--line);color:var(--muted);padding:5px 12px;border-radius:20px;cursor:pointer;font-size:12px}
+#btlab .chip[aria-pressed="true"]{color:#000;background:var(--green);border-color:var(--green)}
+#btlab .devices{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:28px}
+#btlab .dev{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--acc,#555);border-radius:6px;padding:12px;text-align:left;color:var(--silver);cursor:pointer}
+#btlab .dev:hover{border-color:#555;border-left-color:var(--acc)}
+#btlab .dev[aria-current="true"]{border-color:var(--blue);border-left-color:var(--acc);background:#10181c}
+#btlab .dev b{display:block;color:#fff;font-size:13px;margin-bottom:3px}
+#btlab .dev small{color:var(--muted);font-size:11px}
+#btlab .enclosure{background:linear-gradient(145deg,#2a2a2a,#1a1a1a);border:4px solid #444;border-top-color:var(--acc);border-radius:20px;padding:28px;box-shadow:0 20px 50px rgba(0,0,0,.8),inset 0 0 10px rgba(255,255,255,.05);position:relative}
+#btlab .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+#btlab .dhead h2{margin:0;color:#fff;font-size:1.5rem;letter-spacing:2px}
+#btlab .dhead .sub{color:var(--acc);font-size:12px;letter-spacing:1px;margin-top:4px}
+#btlab .dnotes{font-size:12px;color:#999;max-width:640px;margin:0 0 18px}
+#btlab .led{width:12px;height:12px;border-radius:50%;background:var(--red);box-shadow:0 0 10px rgba(255,0,0,.8);display:inline-block;vertical-align:middle;margin-right:8px}
+#btlab .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#btlab .row.between{justify-content:space-between}
+#btlab select,#btlab input[type=text],#btlab input[type=email],#btlab input[type=password],#btlab textarea{background:#000;color:var(--blue);border:1px solid #444;padding:9px 10px;border-radius:4px}
+#btlab textarea{width:100%;min-height:90px;resize:vertical}
+#btlab .mode{color:#666;font-size:12px;letter-spacing:1px}
+#btlab .groups{display:flex;flex-wrap:wrap;gap:16px;margin:20px 0}
+#btlab .group{background:#0a0a0a;border:1px solid var(--line);border-radius:10px;padding:14px 12px 16px;flex:1 1 auto;min-width:0}
+#btlab .group h3{margin:0 0 12px;font-size:11px;letter-spacing:2px;color:var(--acc);font-weight:bold}
+#btlab .ctls{display:flex;gap:10px;align-items:flex-end;justify-content:space-around;overflow-x:auto;padding-bottom:4px}
+#btlab .ctl{display:flex;flex-direction:column;align-items:center;min-width:56px;flex-shrink:0}
+#btlab .ctl .lbl{font-size:10px;color:#aaa;font-weight:bold;letter-spacing:1px;text-align:center;margin-top:8px;max-width:84px}
+#btlab .ctl .val{font-size:10px;color:var(--blue);height:13px;margin-bottom:6px;white-space:nowrap}
+#btlab .knob{width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#555,#111 70%);border:2px solid #000;box-shadow:0 4px 10px rgba(0,0,0,.7),0 0 0 3px #2b2b2b;position:relative;cursor:ns-resize;touch-action:none;outline:none}
+#btlab .knob:focus-visible{box-shadow:0 0 0 3px var(--blue)}
+#btlab .knob .ptr{position:absolute;left:50%;top:5px;width:4px;height:22px;margin-left:-2px;background:#eee;border-radius:2px;transform-origin:50% 26px}
+#btlab .knob-ctl .ticks{font-size:9px;color:#555;display:flex;justify-content:space-between;width:70px;margin-top:2px}
+#btlab .vs-wrap{height:170px;display:flex;justify-content:center}
+#btlab input.vslider{writing-mode:vertical-lr;direction:rtl;width:22px;height:100%;accent-color:var(--red);cursor:pointer}
+#btlab .sw{display:flex;border:1px solid #444;border-radius:4px;overflow:hidden}
+#btlab .sw button{background:#111;color:#888;border:none;padding:7px 10px;cursor:pointer;font-size:11px;font-weight:bold;letter-spacing:1px}
+#btlab .sw button[aria-pressed="true"]{background:var(--acc);color:#000}
+#btlab .sw-ctl .lbl{margin-top:8px}
+#btlab .tag{position:absolute;bottom:10px;right:24px;font-size:11px;color:#555;font-style:italic}
+#btlab .saverow input[type=text]{flex:1 1 220px}
+#btlab .section{margin-top:36px}
+#btlab .section h2{font-size:1.1rem;border-bottom:2px solid var(--line);padding-bottom:8px;color:var(--green);letter-spacing:1px}
+#btlab .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:14px}
+#btlab .pi{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#btlab .pi:hover{border-color:var(--blue)}
+#btlab .pi .nm{cursor:pointer;color:var(--blue);word-break:break-word;flex:1;background:none;border:none;text-align:left;padding:0;text-transform:uppercase}
+#btlab .pi .x{color:#ff4444;background:none;border:none;font-size:18px;cursor:pointer;padding:0 4px}
+#btlab .empty{color:#555;font-size:13px;grid-column:1/-1}
+#btlab .note{font-size:12px;color:#888}
+#btlab .banner{background:#10181c;border:1px solid var(--blue);border-radius:6px;padding:10px 14px;margin:14px 0;font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+#btlab .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000;border:1px solid var(--green);color:var(--green);padding:10px 18px;border-radius:6px;font-size:13px;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}
+#btlab .toast.show{opacity:1}
+#btlab .toast.err{border-color:#ff4444;color:#ff6666}
+#btlab .fb{display:grid;gap:10px;max-width:640px}
+#btlab .fb label{font-size:12px;color:#aaa;display:grid;gap:4px}
+#btlab .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#btlab .modal{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:9998;padding:16px}
+#btlab .modal.open{display:flex}
+#btlab .card{background:#161616;border:1px solid #444;border-radius:10px;padding:22px;width:100%;max-width:380px;display:grid;gap:12px}
+#btlab .card h3{margin:0;color:#fff;letter-spacing:2px}
+#btlab .card input{width:100%}
+#btlab .link{background:none;border:none;color:var(--blue);cursor:pointer;font-size:12px;padding:0;text-decoration:underline}
+#btlab .foot{margin-top:56px;font-size:11px;color:#555;text-align:center;line-height:1.6}
+@media (max-width:700px){
+  #btlab .hdr h1{font-size:1.7rem}
+  #btlab .enclosure{padding:18px 12px}
+  #btlab .chips{margin-left:0}
+  #btlab .devices{grid-template-columns:1fr 1fr;gap:8px}
+  #btlab .dev{padding:9px}
+  #btlab .dev b{font-size:12px}
+  #btlab .knob{width:54px;height:54px}
+  #btlab .knob .ptr{height:19px;transform-origin:50% 22px}
+  #btlab .vs-wrap{height:150px}
+}
+</style>
+
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <h1>TONE LAB</h1>
+      <div class="brand">THE BENT TREE</div>
+    </div>
+    <div class="acct" id="acct"></div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-kind="pedal" aria-selected="true">PEDALS</button>
+    <button class="tab" role="tab" data-kind="amp" aria-selected="false">AMPS</button>
+    <div class="chips" role="group" aria-label="Filter by instrument">
+      <button class="chip" data-filter="all" aria-pressed="true">ALL</button>
+      <button class="chip" data-filter="guitar" aria-pressed="false">GUITAR</button>
+      <button class="chip" data-filter="bass" aria-pressed="false">BASS</button>
+    </div>
+  </div>
+
+  <div class="devices" id="devices"></div>
+
+  <div class="enclosure" id="enc">
+    <div class="dhead">
+      <div>
+        <h2><span class="led"></span><span id="dName"></span></h2>
+        <div class="sub" id="dSub"></div>
+      </div>
+      <div class="row">
+        <label class="note" for="presetSel">PRESET:</label>
+        <select id="presetSel"></select>
+      </div>
+    </div>
+    <p class="dnotes" id="dNotes"></p>
+    <div class="row between">
+      <div class="mode" id="mode">MODE: MANUAL</div>
+      <div class="row">
+        <button class="btn sm ghost" id="resetBtn" title="Set every control back to its default">RESET</button>
+        <button class="btn sm ghost" id="copyBtn" title="Copy these settings as text">COPY SETTINGS</button>
+      </div>
+    </div>
+    <div class="groups" id="groups"></div>
+    <div class="row saverow">
+      <input type="text" id="presetName" maxlength="60" placeholder="NAME YOUR TONE...">
+      <button class="btn go" id="saveBtn">SAVE PRESET</button>
+    </div>
+    <div class="tag" id="dTag"></div>
+  </div>
+
+  <div id="importBanner"></div>
+
+  <div class="section">
+    <h2 id="userHead">YOUR PRESETS</h2>
+    <div class="note" id="storeNote"></div>
+    <div class="grid" id="userList"></div>
+  </div>
+
+  <div class="section">
+    <h2>FEEDBACK &amp; GEAR REQUESTS</h2>
+    <p class="note">Tell us what's working, what's broken, or which pedal or amp you want added next.</p>
+    <form class="fb" id="fbForm" novalidate>
+      <label>WHAT'S THIS ABOUT?
+        <select id="fbKind">
+          <option value="pedal_request">Request a pedal</option>
+          <option value="amp_request">Request an amp</option>
+          <option value="feedback">General feedback</option>
+          <option value="bug">Something's broken</option>
+        </select>
+      </label>
+      <label id="fbGearWrap">WHICH GEAR? (brand + model)
+        <input type="text" id="fbGear" maxlength="120" placeholder="e.g. Boss BD-2 Blues Driver">
+      </label>
+      <label>MESSAGE
+        <textarea id="fbMsg" maxlength="2000" placeholder="Anything we should know - how you use it, what controls matter..."></textarea>
+      </label>
+      <label id="fbEmailWrap">YOUR EMAIL (optional, so we can tell you when it's added)
+        <input type="email" id="fbEmail" maxlength="200" placeholder="you@example.com">
+      </label>
+      <div class="hp" aria-hidden="true"><label>Leave blank<input type="text" id="fbHp" tabindex="-1" autocomplete="off"></label></div>
+      <div><button class="btn go" type="submit" id="fbSend">SEND</button></div>
+    </form>
+  </div>
+
+  <div class="foot">
+    &copy; <span id="yr"></span> THE BENT TREE / LRRECORDS - TONE LAB<br>
+    Settings guides for players. Not affiliated with or endorsed by any manufacturer; product names are trademarks of their owners.<br>
+    Factory presets are Bent Tree starting points, not manufacturer settings. Trust your ears.
+  </div>
+</div>
+
+<div class="modal" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <form class="card" id="authForm" novalidate>
+    <h3 id="authTitle">SIGN IN</h3>
+    <p class="note" id="authHelp">Sign in to save your presets to your account and recall them on any device.</p>
+    <input type="email" id="authEmail" placeholder="EMAIL" autocomplete="email" required>
+    <input type="password" id="authPass" placeholder="PASSWORD (min 8 characters)" autocomplete="current-password" minlength="8">
+    <button class="btn go" type="submit" id="authGo">SIGN IN</button>
+    <div class="row between">
+      <button type="button" class="link" id="authSwap">New here? Create an account</button>
+      <button type="button" class="link" id="authForgot">Forgot password?</button>
+    </div>
+    <button type="button" class="link" id="authMagic">Email me a sign-in link instead</button>
+    <button type="button" class="btn sm ghost" id="authClose">CLOSE</button>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ==========================================================
+     CONFIG - fill these in to switch on logins (see README.md)
+     Leave blank and the app runs in "this device only" mode.
+     The anon key is safe to publish: Row Level Security in
+     supabase/schema.sql is what protects each user's data.
+     ========================================================== */
+  var CONFIG = {
+    SUPABASE_URL: 'https://acovoiswlinlrauegqcz.supabase.co',  // Bent Tree Tone Lab project (own project, isolated from Artist-Pages)
+    SUPABASE_ANON_KEY: 'sb_publishable_BEqh3X5SlAM9ax23KRGvmQ_RPGB0Ioh',  // publishable key (safe to publish)
+    REDIRECT_URL: 'https://lrrecords.com.au/tone-lab'  // page users land on from email links
+  };
+
+  /* ==========================================================
+     GEAR LIBRARY
+     Add a pedal/amp by adding an object here. Control types:
+       knob   { min, max, step, def }            0-10 style dial
+       slider { min, max, step, def, unit }      vertical fader
+       switch { options:[...], def }             toggle / mode
+     Each preset's "v" only needs the controls it changes;
+     anything missing falls back to the control's default.
+     ========================================================== */
+  function K(id, label, def, help) { return { id: id, label: label, type: 'knob', min: 0, max: 10, step: 0.5, def: def == null ? 5 : def, help: help || '' }; }
+  function S(id, label, def, min, max, step, unit) { return { id: id, label: label, type: 'slider', min: min, max: max, step: step || 1, def: def || 0, unit: unit || '' }; }
+  function SW(id, label, options, def) { return { id: id, label: label, type: 'switch', options: options, def: def || options[0] }; }
+  function DB(id, label, range) { return S(id, label, 0, -range, range, 1, 'dB'); }
+  function N(id, label, def) { return S(id, label, def == null ? 5 : def, 0, 10, 0.5, ''); }
+
+  var EQ_BANDS = ['31.25', '62.5', '125', '250', '500', '1K', '2K', '4K', '8K', '16K'];
+  function eq(arr, extra) { var v = {}; arr.forEach(function (x, i) { v['b' + i] = x; }); return Object.assign(v, extra || {}); }
+
+  var DEVICES = [
+    {
+      id: 'fraggles-eq', kind: 'pedal', name: 'FRAGGLES EQ', maker: 'MXR', model: 'M108S Ten Band EQ',
+      category: '10-band graphic EQ', inst: ['guitar', 'bass'], acc: '#00ccff',
+      tag: 'TEN BAND GRAPHIC EQ // M108S STYLE',
+      notes: 'Ten bands of +/-12 dB plus Volume and Gain faders. Run it after drive pedals to sculpt, or in the loop to shape the whole amp.',
+      groups: [
+        { title: 'EQ BANDS (Hz)', controls: EQ_BANDS.map(function (f, i) { return DB('b' + i, f, 12); }) },
+        { title: 'OUTPUT', controls: [DB('vol', 'VOLUME', 12), DB('gain', 'GAIN', 12)] }
+      ],
+      presets: [
+        { n: 'Flat / Bypass', v: eq([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) },
+        { n: 'Classic Metal Scoop', v: eq([4, 6, 2, -4, -8, -4, 2, 6, 4, 2]) },
+        { n: 'Modern Tight Metal', v: eq([-4, -2, 2, 0, -2, 4, 6, 4, 2, -2]) },
+        { n: 'Doom & Sludge', v: eq([10, 12, 8, 4, 2, -2, -4, -2, 0, 2]) },
+        { n: 'Thrash Attack', v: eq([0, 2, 4, -6, -8, 2, 6, 8, 4, 0]) },
+        { n: 'Old School Death', v: eq([2, 4, 6, 2, -4, -2, 4, 6, 2, 0]) },
+        { n: 'Solo Mid Boost', v: eq([-6, -4, -2, 2, 6, 10, 6, 2, 0, -2], { vol: 3 }) },
+        { n: 'Bass Growl', v: eq([2, 4, 3, -2, 0, 4, 5, 2, -2, -4]) }
+      ]
+    },
+    {
+      id: 'proco-rat', kind: 'pedal', name: 'RAT', maker: 'Pro Co', model: 'RAT 2',
+      category: 'Distortion', inst: ['guitar', 'bass'], acc: '#e8e8e8',
+      tag: 'DISTORTION // RAT STYLE',
+      notes: 'Heads up: FILTER works backwards to a normal tone knob - clockwise gets darker and smoother, counter-clockwise gets brighter and rawer.',
+      groups: [{ title: 'CONTROLS', controls: [K('dist', 'DISTORTION', 5), K('filter', 'FILTER', 4, 'Clockwise = darker'), K('vol', 'VOLUME', 5)] }],
+      presets: [
+        { n: 'Classic Crunch', v: { dist: 4, filter: 3, vol: 6 } },
+        { n: 'Full RAT', v: { dist: 8, filter: 4, vol: 5 } },
+        { n: 'Fuzzy Doom', v: { dist: 10, filter: 6.5, vol: 5 } },
+        { n: 'Thrash Rhythm', v: { dist: 7, filter: 2.5, vol: 5.5 } },
+        { n: 'Low-Gain Boost', v: { dist: 1.5, filter: 2, vol: 8 } },
+        { n: 'Bass Grit (blend with clean)', v: { dist: 5, filter: 3, vol: 6 } }
+      ]
+    },
+    {
+      id: 'ehx-bass-micro-synth', kind: 'pedal', name: 'BASS MICRO SYNTH', maker: 'Electro-Harmonix', model: 'Bass Micro Synthesizer',
+      category: 'Analog synth', inst: ['bass'], acc: '#ff8a00',
+      tag: 'ANALOG BASS SYNTH // 10 SLIDERS',
+      notes: 'Four mixable voices (Sub-Octave, dry Guitar/Bass, Octave Up, Square) through an envelope-triggered filter sweep. Play single notes - chords confuse the tracking. Set TRIG to just catch your picking strength.',
+      groups: [
+        { title: 'TRIGGER', controls: [N('trig', 'TRIG', 5)] },
+        { title: 'VOICE MIX', controls: [N('sub', 'SUB OCT', 5), N('dry', 'GUITAR', 5), N('oct', 'OCTAVE', 0), N('sq', 'SQUARE', 0)] },
+        { title: 'FILTER SWEEP', controls: [N('atk', 'ATTACK DELAY', 0), N('start', 'START FREQ', 5), N('stop', 'STOP FREQ', 5), N('rate', 'RATE', 5), N('res', 'RESONANCE', 3)] }
+      ],
+      presets: [
+        { n: 'Subtle Sub Thickener', v: { trig: 4, sub: 5, dry: 8, oct: 0, sq: 0, atk: 0, start: 10, stop: 10, rate: 0, res: 0 } },
+        { n: '70s Synth Bass', v: { trig: 5, sub: 8, dry: 4, oct: 0, sq: 0, atk: 0, start: 7, stop: 2, rate: 4, res: 4 } },
+        { n: 'Funk Filter Sweep', v: { trig: 6, sub: 3, dry: 6, oct: 0, sq: 0, atk: 0, start: 2, stop: 9, rate: 3, res: 7 } },
+        { n: 'Bowed Swell', v: { trig: 5, sub: 6, dry: 5, oct: 3, sq: 0, atk: 7, start: 3, stop: 7, rate: 6, res: 3 } },
+        { n: 'Square Wave Lead', v: { trig: 6, sub: 2, dry: 0, oct: 5, sq: 8, atk: 0, start: 4, stop: 8, rate: 2, res: 6 } },
+        { n: 'Gated Octave Fuzz', v: { trig: 7, sub: 6, dry: 2, oct: 6, sq: 6, atk: 0, start: 9, stop: 9, rate: 0, res: 2 } }
+      ]
+    },
+    {
+      id: 'digitech-bass-multi-chorus', kind: 'pedal', name: 'BASS MULTI CHORUS', maker: 'DigiTech', model: 'Bass Multi Chorus',
+      category: 'Chorus', inst: ['bass'], acc: '#7a5cff',
+      tag: 'MULTI-VOICE CHORUS // FOR BASS',
+      notes: 'VOICE sets how many chorus voices are stacked - one at minimum, up to 16 at maximum. Fewer voices = classic wobble, more = a lush wash.',
+      groups: [{ title: 'CONTROLS', controls: [K('level', 'LEVEL', 5), K('speed', 'SPEED', 4), K('depth', 'DEPTH', 5), K('voice', 'VOICE', 5, 'Min = 1 voice, max = 16')] }],
+      presets: [
+        { n: '80s Fretless', v: { level: 5, speed: 3, depth: 4, voice: 3 } },
+        { n: 'Clean Thickener', v: { level: 5, speed: 2, depth: 2, voice: 5 } },
+        { n: 'Lush Wide Wash', v: { level: 6, speed: 4, depth: 7, voice: 9 } },
+        { n: 'Slow Shimmer', v: { level: 5, speed: 1.5, depth: 6, voice: 6 } },
+        { n: 'Seasick Warble', v: { level: 5, speed: 7, depth: 9, voice: 2 } }
+      ]
+    },
+    {
+      id: 'ibanez-ts9', kind: 'pedal', name: 'TUBE SCREAMER', maker: 'Ibanez', model: 'TS9 Tube Screamer',
+      category: 'Overdrive', inst: ['guitar', 'bass'], acc: '#2fbf4a',
+      tag: 'OVERDRIVE // TS9 STYLE',
+      notes: 'The classic mid-hump overdrive. Metal players run it with drive at zero and level up high to tighten a high-gain amp. On bass it cuts lows, so use it with a blend or parallel clean.',
+      groups: [{ title: 'CONTROLS', controls: [K('drive', 'OVERDRIVE', 5), K('tone', 'TONE', 5), K('level', 'LEVEL', 5)] }],
+      presets: [
+        { n: 'Metal Tightener (boost)', v: { drive: 0, tone: 6, level: 10 } },
+        { n: 'Edge of Breakup', v: { drive: 3, tone: 5, level: 6 } },
+        { n: 'Blues Lead', v: { drive: 6, tone: 5, level: 6 } },
+        { n: 'Texas Grit', v: { drive: 5, tone: 6.5, level: 7 } },
+        { n: 'Bass Mid Push', v: { drive: 2, tone: 4, level: 6 } }
+      ]
+    },
+    {
+      id: 'ehx-big-muff', kind: 'pedal', name: 'BIG MUFF PI', maker: 'Electro-Harmonix', model: 'Big Muff Pi',
+      category: 'Fuzz', inst: ['guitar', 'bass'], acc: '#d43c3c',
+      tag: 'FUZZ / SUSTAINER // MUFF STYLE',
+      notes: 'Wall-of-fuzz with a big mid scoop. TONE sweeps from bassy and smooth to bright and cutting. Bass players often lose definition - blend it or push TONE past noon.',
+      groups: [{ title: 'CONTROLS', controls: [K('vol', 'VOLUME', 5), K('tone', 'TONE', 5), K('sus', 'SUSTAIN', 6)] }],
+      presets: [
+        { n: 'Stoner Wall', v: { vol: 6, tone: 4, sus: 8 } },
+        { n: '90s Alt Rock', v: { vol: 5, tone: 6, sus: 7 } },
+        { n: 'Singing Lead', v: { vol: 6, tone: 6, sus: 9.5 } },
+        { n: 'Doom Bass', v: { vol: 6, tone: 3, sus: 6 } },
+        { n: 'Gnarly Low-Sustain', v: { vol: 7, tone: 5, sus: 3 } }
+      ]
+    },
+    {
+      id: 'mxr-dyna-comp', kind: 'pedal', name: 'DYNA COMP', maker: 'MXR', model: 'M102 Dyna Comp',
+      category: 'Compressor', inst: ['guitar', 'bass'], acc: '#ff3b3b',
+      tag: 'COMPRESSOR // DYNA COMP STYLE',
+      notes: 'Two knobs. SENSITIVITY sets how hard it squashes (and how much sustain you get); OUTPUT sets the level. High sensitivity adds noise and that famous "pop" on the attack.',
+      groups: [{ title: 'CONTROLS', controls: [K('out', 'OUTPUT', 5), K('sens', 'SENSITIVITY', 5)] }],
+      presets: [
+        { n: 'Transparent Leveller', v: { out: 5, sens: 3 } },
+        { n: 'Funk Spank', v: { out: 5, sens: 6 } },
+        { n: 'Country Squash', v: { out: 6, sens: 7.5 } },
+        { n: 'Bass Sustain', v: { out: 5, sens: 5 } },
+        { n: 'Clean Boost', v: { out: 8, sens: 1 } }
+      ]
+    },
+    {
+      id: 'boss-ds1', kind: 'pedal', name: 'DISTORTION DS-1', maker: 'Boss', model: 'DS-1 Distortion',
+      category: 'Distortion', inst: ['guitar'], acc: '#ff9d1f',
+      tag: 'DISTORTION // DS-1 STYLE',
+      notes: 'Bright, aggressive and cheap - the first distortion for a lot of players. Keep TONE below noon if it gets fizzy.',
+      groups: [{ title: 'CONTROLS', controls: [K('tone', 'TONE', 5), K('level', 'LEVEL', 5), K('dist', 'DIST', 5)] }],
+      presets: [
+        { n: 'Classic 80s Rock', v: { tone: 5, level: 5, dist: 6 } },
+        { n: 'Grunge', v: { tone: 4, level: 6, dist: 10 } },
+        { n: 'Punk', v: { tone: 6, level: 5, dist: 8 } },
+        { n: 'Boost a Dirty Amp', v: { tone: 6, level: 8, dist: 1 } },
+        { n: 'Warm Lead', v: { tone: 3.5, level: 6, dist: 7 } }
+      ]
+    },
+    {
+      id: 'darkglass-ao900', kind: 'amp', name: 'ALPHA·OMEGA 900', maker: 'Darkglass', model: 'Alpha·Omega 900 head',
+      category: '900W bass head', inst: ['bass'], acc: '#b8ff3b',
+      tag: 'BASS HEAD // ALPHA·OMEGA ENGINE + 6-BAND EQ',
+      notes: 'The Alpha·Omega engine (Comp, Drive, Level, Blend, Alpha/Omega Mod, Bite, Growl) sits before the clean section, so the 6-band EQ shapes everything. EQ: Bass shelf at 80 Hz, mid sliders at 250 / 500 / 1.5k / 3k, Treble shelf at 5 kHz.',
+      groups: [
+        { title: 'INPUT', controls: [SW('input', 'PICKUPS', ['PASSIVE', 'ACTIVE'], 'PASSIVE')] },
+        { title: 'ALPHA·OMEGA ENGINE', controls: [
+          SW('engine', 'ENGINE', ['OFF', 'ON'], 'ON'),
+          K('comp', 'COMP', 3), K('drive', 'DRIVE', 5), K('level', 'LEVEL', 5), K('blend', 'BLEND', 5, 'Clean to distorted'),
+          SW('mod', 'MOD', ['ALPHA', 'OMEGA'], 'ALPHA'), SW('bite', 'BITE', ['OFF', 'ON'], 'OFF'), SW('growl', 'GROWL', ['OFF', 'ON'], 'OFF')
+        ] },
+        { title: 'CLEAN SECTION + 6-BAND EQ', controls: [
+          K('gain', 'GAIN', 5),
+          DB('bass', 'BASS 80', 12), DB('m250', '250', 10), DB('m500', '500', 10), DB('m1k5', '1.5K', 10), DB('m3k', '3K', 10), DB('treble', 'TREB 5K', 12),
+          K('master', 'MASTER', 3)
+        ] }
+      ],
+      presets: [
+        { n: 'Clean Punch (engine off)', v: { engine: 'OFF', gain: 5, bass: 3, m250: -2, m500: 0, m1k5: 2, m3k: 1, treble: 1, master: 3 } },
+        { n: 'Modern Metal Grind', v: { engine: 'ON', comp: 4, drive: 6, level: 5, blend: 6, mod: 'OMEGA', bite: 'ON', growl: 'ON', bass: 3, m250: -3, m500: -2, m1k5: 3, m3k: 2, treble: 1 } },
+        { n: 'Djent Clank', v: { engine: 'ON', comp: 6, drive: 4, level: 5, blend: 5, mod: 'ALPHA', bite: 'ON', growl: 'OFF', bass: 2, m250: -4, m500: -3, m1k5: 1, m3k: 4, treble: 4 } },
+        { n: 'Doom Fuzz Floor', v: { engine: 'ON', comp: 2, drive: 9, level: 5, blend: 7, mod: 'OMEGA', bite: 'OFF', growl: 'ON', bass: 5, m250: 2, m500: 0, m1k5: -2, m3k: -3, treble: -2 } },
+        { n: 'Vintage Rock Grit', v: { engine: 'ON', comp: 3, drive: 3.5, level: 5, blend: 4, mod: 'ALPHA', bite: 'OFF', growl: 'OFF', bass: 2, m250: 1, m500: 2, m1k5: 1, m3k: -1, treble: -1 } },
+        { n: 'Slap Sparkle (engine off)', v: { engine: 'OFF', comp: 5, gain: 5, bass: 4, m250: -3, m500: -4, m1k5: 0, m3k: 3, treble: 5 } }
+      ]
+    }
+  ];
+
+  /* ==========================================================
+     STATE + HELPERS
+     ========================================================== */
+  var root = document.getElementById('btlab');
+  function $(id) { return root.querySelector('#' + id); }
+  function el(tag, attrs, text) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === 'class') e.className = attrs[k];
+      else if (k === 'style') e.style.cssText = attrs[k];
+      else e.setAttribute(k, attrs[k]);
+    });
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function ls(key, val) {
+    try {
+      if (val === undefined) { var r = localStorage.getItem(key); return r ? JSON.parse(r) : null; }
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) { return null; }
+  }
+  var toastTimer;
+  function toast(msg, isErr) {
+    var t = $('toast'); t.textContent = msg; t.className = 'toast show' + (isErr ? ' err' : '');
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.className = 'toast'; }, 3200);
+  }
+
+  var state = { kind: 'pedal', filter: 'all', device: DEVICES[0], values: {}, user: null, presets: [] };
+  var widgets = {};   // control id -> { set(v) }
+  var sb = null;      // supabase client when configured
+
+  function allControls(d) { return d.groups.reduce(function (a, g) { return a.concat(g.controls); }, []); }
+  function snap(c, v) { v = Math.max(c.min, Math.min(c.max, v)); return Math.round(v / c.step) * c.step; }
+  function fmtNum(v) { return (Math.round(v * 10) / 10).toString(); }
+  function fmt(c, v) {
+    if (c.type === 'switch') return v;
+    if (c.unit === 'dB') return (v > 0 ? '+' : '') + fmtNum(v) + ' dB';
+    return fmtNum(v);
+  }
+  function clock(c, v) {
+    var hrs = 12 + (-135 + 270 * (v - c.min) / (c.max - c.min)) / 30;
+    hrs = Math.round(hrs * 2) / 2;
+    var h = Math.floor(hrs), m = hrs - h ? '30' : '00';
+    if (h > 12) h -= 12;
+    return h + ':' + m;
+  }
+
+  /* ==========================================================
+     CONTROL WIDGETS
+     ========================================================== */
+  function buildKnob(c, onChange) {
+    var wrap = el('div', { class: 'ctl knob-ctl' });
+    var val = el('div', { class: 'val' });
+    var knob = el('div', { class: 'knob', role: 'slider', tabindex: '0', 'aria-label': c.label, 'aria-valuemin': c.min, 'aria-valuemax': c.max, title: (c.help ? c.help + ' - ' : '') + 'Drag up/down, arrow keys, double-click to reset' });
+    var ptr = el('div', { class: 'ptr' });
+    knob.appendChild(ptr);
+    var cur = c.def;
+    function set(v, fire) {
+      cur = snap(c, v);
+      ptr.style.transform = 'rotate(' + (-135 + 270 * (cur - c.min) / (c.max - c.min)) + 'deg)';
+      knob.setAttribute('aria-valuenow', cur);
+      knob.setAttribute('aria-valuetext', fmtNum(cur) + ' (' + clock(c, cur) + ')');
+      val.textContent = fmtNum(cur) + ' · ' + clock(c, cur);
+      if (fire) onChange(c.id, cur);
+    }
+    var startY = 0, startV = 0, dragging = false;
+    knob.addEventListener('pointerdown', function (e) { dragging = true; startY = e.clientY; startV = cur; knob.setPointerCapture(e.pointerId); knob.focus(); e.preventDefault(); });
+    knob.addEventListener('pointermove', function (e) { if (!dragging) return; set(startV + (startY - e.clientY) / 150 * (c.max - c.min), true); });
+    knob.addEventListener('pointerup', function () { dragging = false; });
+    knob.addEventListener('pointercancel', function () { dragging = false; });
+    knob.addEventListener('dblclick', function () { set(c.def, true); });
+    knob.addEventListener('wheel', function (e) { if (document.activeElement !== knob) return; e.preventDefault(); set(cur + (e.deltaY < 0 ? c.step : -c.step), true); }, { passive: false });
+    knob.addEventListener('keydown', function (e) {
+      var big = (c.max - c.min) / 10, map = { ArrowUp: c.step, ArrowRight: c.step, ArrowDown: -c.step, ArrowLeft: -c.step, PageUp: big, PageDown: -big };
+      if (map[e.key] != null) { set(cur + map[e.key], true); e.preventDefault(); }
+      else if (e.key === 'Home') { set(c.min, true); e.preventDefault(); }
+      else if (e.key === 'End') { set(c.max, true); e.preventDefault(); }
+    });
+    wrap.appendChild(val); wrap.appendChild(knob); wrap.appendChild(el('div', { class: 'lbl' }, c.label));
+    return { node: wrap, set: set };
+  }
+
+  function buildSlider(c, onChange) {
+    var wrap = el('div', { class: 'ctl' });
+    var val = el('div', { class: 'val' });
+    var box = el('div', { class: 'vs-wrap' });
+    var input = el('input', { type: 'range', class: 'vslider', orient: 'vertical', min: c.min, max: c.max, step: c.step, 'aria-label': c.label });
+    function set(v, fire) { var s = snap(c, v); input.value = s; val.textContent = fmt(c, s); if (fire) onChange(c.id, s); }
+    input.addEventListener('input', function () { set(parseFloat(input.value), true); });
+    input.addEventListener('dblclick', function () { set(c.def, true); });
+    box.appendChild(input);
+    wrap.appendChild(val); wrap.appendChild(box); wrap.appendChild(el('div', { class: 'lbl' }, c.label));
+    return { node: wrap, set: set };
+  }
+
+  function buildSwitch(c, onChange) {
+    var wrap = el('div', { class: 'ctl sw-ctl' });
+    var sw = el('div', { class: 'sw', role: 'group', 'aria-label': c.label });
+    var btns = c.options.map(function (o) {
+      var b = el('button', { type: 'button', 'aria-pressed': 'false' }, o);
+      b.addEventListener('click', function () { set(o, true); });
+      sw.appendChild(b); return b;
+    });
+    function set(v, fire) {
+      if (c.options.indexOf(v) < 0) v = c.def;
+      btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.textContent === v)); });
+      if (fire) onChange(c.id, v);
+    }
+    wrap.appendChild(el('div', { class: 'val' })); wrap.appendChild(sw); wrap.appendChild(el('div', { class: 'lbl' }, c.label));
+    return { node: wrap, set: set };
+  }
+
+  /* ==========================================================
+     STORAGE - local (this device) or Supabase (account)
+     ========================================================== */
+  var LOCAL_KEY = 'btlab_presets_v1';
+  var LocalStore = {
+    _all: function () { return ls(LOCAL_KEY) || {}; },
+    list: function (dev) { return Promise.resolve((this._all()[dev] || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); })); },
+    save: function (dev, name, settings) {
+      var all = this._all(), arr = all[dev] || [], hit = arr.filter(function (p) { return p.name.toLowerCase() === name.toLowerCase(); })[0];
+      if (hit) { hit.settings = settings; hit.updated_at = new Date().toISOString(); }
+      else arr.push({ id: 'l' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name, settings: settings, updated_at: new Date().toISOString() });
+      all[dev] = arr; ls(LOCAL_KEY, all); return Promise.resolve();
+    },
+    remove: function (dev, id) { var all = this._all(); all[dev] = (all[dev] || []).filter(function (p) { return p.id !== id; }); ls(LOCAL_KEY, all); return Promise.resolve(); },
+    count: function () { var all = this._all(); return Object.keys(all).reduce(function (n, k) { return n + all[k].length; }, 0); },
+    clear: function () { ls(LOCAL_KEY, {}); }
+  };
+  var CloudStore = {
+    list: function (dev) {
+      return sb.from('tone_lab_presets').select('id,name,settings,updated_at').eq('device_id', dev).order('name')
+        .then(function (r) { if (r.error) throw r.error; return r.data; });
+    },
+    save: function (dev, name, settings) {
+      return sb.from('tone_lab_presets').upsert({ user_id: state.user.id, device_id: dev, name: name, settings: settings, updated_at: new Date().toISOString() }, { onConflict: 'user_id,device_id,name' })
+        .then(function (r) { if (r.error) throw r.error; });
+    },
+    remove: function (dev, id) { return sb.from('tone_lab_presets').delete().eq('id', id).then(function (r) { if (r.error) throw r.error; }); }
+  };
+  function store() { return state.user && sb ? CloudStore : LocalStore; }
+
+  // One-off: bring presets from the original Fraggles EQ app across.
+  (function migrateFraggles() {
+    try {
+      if (localStorage.getItem('btlab_migrated_fraggles')) return;
+      var old = JSON.parse(localStorage.getItem('fraggles_eq_user') || 'null');
+      if (old && typeof old === 'object') {
+        Object.keys(old).forEach(function (name) { if (Array.isArray(old[name])) LocalStore.save('fraggles-eq', name.slice(0, 60), eq(old[name])); });
+      }
+      localStorage.setItem('btlab_migrated_fraggles', '1');
+    } catch (e) { /* storage blocked - ignore */ }
+  })();
+
+  /* ==========================================================
+     RENDER
+     ========================================================== */
+  function visibleDevices() {
+    return DEVICES.filter(function (d) { return d.kind === state.kind && (state.filter === 'all' || d.inst.indexOf(state.filter) >= 0); });
+  }
+
+  function renderDeviceList() {
+    var box = $('devices'); box.innerHTML = '';
+    var list = visibleDevices();
+    if (!list.length) { box.appendChild(el('div', { class: 'empty' }, 'Nothing here yet for that filter - request one below.')); return; }
+    list.forEach(function (d) {
+      var b = el('button', { class: 'dev', type: 'button', style: '--acc:' + d.acc, 'aria-current': String(d === state.device) });
+      b.appendChild(el('b', null, d.maker + ' ' + d.model));
+      b.appendChild(el('small', null, d.category + ' · ' + d.inst.join(' / ')));
+      b.addEventListener('click', function () { selectDevice(d); });
+      box.appendChild(b);
+    });
+  }
+
+  function onUserChange(id, v) {
+    state.values[id] = v;
+    $('presetSel').value = '';
+    $('mode').textContent = 'MODE: MANUAL';
+  }
+
+  function renderDevice() {
+    var d = state.device;
+    $('enc').style.setProperty('--acc', d.acc);
+    $('dName').textContent = d.name;
+    $('dSub').textContent = d.maker.toUpperCase() + ' ' + d.model.toUpperCase() + ' · ' + d.category.toUpperCase();
+    $('dNotes').textContent = d.notes;
+    $('dTag').textContent = d.tag;
+    $('userHead').textContent = 'YOUR ' + d.name + ' PRESETS';
+    var gbox = $('groups'); gbox.innerHTML = ''; widgets = {};
+    d.groups.forEach(function (g) {
+      var gEl = el('div', { class: 'group' });
+      gEl.appendChild(el('h3', null, g.title));
+      var row = el('div', { class: 'ctls' });
+      g.controls.forEach(function (c) {
+        var w = c.type === 'knob' ? buildKnob(c, onUserChange) : c.type === 'switch' ? buildSwitch(c, onUserChange) : buildSlider(c, onUserChange);
+        widgets[c.id] = w; row.appendChild(w.node);
+      });
+      gEl.appendChild(row); gbox.appendChild(gEl);
+    });
+    applyValues({}, 'MODE: MANUAL');
+  }
+
+  function applyValues(v, modeText) {
+    allControls(state.device).forEach(function (c) {
+      var x = v[c.id] != null ? v[c.id] : c.def;
+      if (c.type !== 'switch') x = snap(c, Number(x));
+      state.values[c.id] = x; widgets[c.id].set(x, false);
+    });
+    $('mode').textContent = modeText;
+  }
+
+  function renderPresetSelect() {
+    var sel = $('presetSel'), d = state.device; sel.innerHTML = '';
+    sel.appendChild(el('option', { value: '' }, '-- SELECT PRESET --'));
+    var fg = el('optgroup', { label: 'TONE LAB PRESETS' });
+    d.presets.forEach(function (p, i) { fg.appendChild(el('option', { value: 'f' + i }, p.n.toUpperCase())); });
+    sel.appendChild(fg);
+    if (state.presets.length) {
+      var ug = el('optgroup', { label: 'YOUR PRESETS' });
+      state.presets.forEach(function (p) { ug.appendChild(el('option', { value: 'u' + p.id }, p.name.toUpperCase())); });
+      sel.appendChild(ug);
+    }
+  }
+
+  function renderUserList() {
+    var box = $('userList'); box.innerHTML = '';
+    $('storeNote').textContent = state.user ? 'Saved to your account (' + state.user.email + ') - available on any device.'
+      : sb ? 'Saved on this device only. Sign in to keep them in your account.' : 'Saved in this browser.';
+    if (!state.presets.length) { box.appendChild(el('div', { class: 'empty' }, 'No presets saved for this ' + state.device.kind + ' yet.')); return; }
+    state.presets.forEach(function (p) {
+      var item = el('div', { class: 'pi' });
+      var nm = el('button', { class: 'nm', type: 'button', title: 'Load' }, p.name);
+      nm.addEventListener('click', function () { loadUserPreset(p); });
+      var x = el('button', { class: 'x', type: 'button', title: 'Delete', 'aria-label': 'Delete ' + p.name }, '×');
+      x.addEventListener('click', function () {
+        if (!x.dataset.armed) {
+          x.dataset.armed = '1'; x.textContent = 'SURE?'; x.style.fontSize = '11px';
+          setTimeout(function () { delete x.dataset.armed; x.textContent = '\u00d7'; x.style.fontSize = ''; }, 3000);
+          return;
+        }
+        store().remove(state.device.id, p.id).then(refreshPresets).then(function () { toast('Deleted'); }).catch(function (e) { toast(e.message || 'Delete failed', true); });
+      });
+      item.appendChild(nm); item.appendChild(x); box.appendChild(item);
+    });
+  }
+
+  function loadUserPreset(p) {
+    applyValues(p.settings || {}, 'MODE: USER (' + p.name.toUpperCase() + ')');
+    $('presetSel').value = 'u' + p.id;
+    $('presetName').value = p.name;
+  }
+
+  function refreshPresets() {
+    return store().list(state.device.id).then(function (list) { state.presets = list || []; })
+      .catch(function (e) { state.presets = []; toast('Could not load presets: ' + (e.message || e), true); })
+      .then(function () { renderPresetSelect(); renderUserList(); });
+  }
+
+  function selectDevice(d) {
+    state.device = d;
+    ls('btlab_last_device', d.id);
+    try { history.replaceState(null, '', '#' + d.id); } catch (e) {}
+    $('presetName').value = '';
+    renderDeviceList(); renderDevice(); refreshPresets();
+  }
+
+  function setKind(kind) {
+    state.kind = kind;
+    root.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.kind === kind)); });
+    var list = visibleDevices();
+    if (list.indexOf(state.device) < 0) {
+      if (list.length) selectDevice(list[0]);
+      else renderDeviceList();
+    } else renderDeviceList();
+  }
+
+  /* ==========================================================
+     ACTIONS
+     ========================================================== */
+  $('presetSel').addEventListener('change', function () {
+    var v = this.value; if (!v) return;
+    if (v[0] === 'f') { var p = state.device.presets[+v.slice(1)]; applyValues(p.v, 'MODE: ' + p.n.toUpperCase()); this.value = v; }
+    else { var u = state.presets.filter(function (x) { return 'u' + x.id === v; })[0]; if (u) loadUserPreset(u); }
+  });
+
+  $('resetBtn').addEventListener('click', function () { applyValues({}, 'MODE: MANUAL'); $('presetSel').value = ''; });
+
+  var pendingOverwrite = null;
+  $('presetName').addEventListener('input', function () { pendingOverwrite = null; });
+  $('saveBtn').addEventListener('click', function () {
+    var name = $('presetName').value.trim().replace(/\s+/g, ' ');
+    if (!name) { toast('Enter a name first!', true); $('presetName').focus(); return; }
+    var exists = state.presets.some(function (p) { return p.name.toLowerCase() === name.toLowerCase(); });
+    if (exists && pendingOverwrite !== name.toLowerCase()) {
+      pendingOverwrite = name.toLowerCase();
+      toast('"' + name + '" exists - click SAVE again to overwrite'); return;
+    }
+    pendingOverwrite = null;
+    var btn = this; btn.disabled = true;
+    store().save(state.device.id, name, Object.assign({}, state.values))
+      .then(refreshPresets)
+      .then(function () {
+        $('presetName').value = '';
+        $('mode').textContent = 'MODE: USER (' + name.toUpperCase() + ')';
+        toast(state.user ? 'Saved to your account' : 'Saved');
+      })
+      .catch(function (e) { toast('Save failed: ' + (e.message || e), true); })
+      .then(function () { btn.disabled = false; });
+  });
+  $('presetName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('saveBtn').click(); });
+
+  $('copyBtn').addEventListener('click', function () {
+    var d = state.device, lines = [d.maker + ' ' + d.model + ' - ' + $('mode').textContent.replace('MODE: ', '')];
+    d.groups.forEach(function (g) {
+      lines.push('[' + g.title + ']');
+      g.controls.forEach(function (c) {
+        var v = state.values[c.id];
+        lines.push('  ' + c.label + ': ' + fmt(c, v) + (c.type === 'knob' ? ' (' + clock(c, v) + ')' : ''));
+      });
+    });
+    lines.push('via Bent Tree Tone Lab');
+    var text = lines.join('\n');
+    var done = function () { toast('Settings copied'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    else { fallbackCopy(text); done(); }
+  });
+  function fallbackCopy(text) {
+    var ta = el('textarea', { style: 'position:fixed;left:-9999px' }); ta.value = text; root.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {} root.removeChild(ta);
+  }
+
+  root.querySelectorAll('.tab').forEach(function (t) { t.addEventListener('click', function () { setKind(t.dataset.kind); }); });
+  root.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      state.filter = c.dataset.filter;
+      root.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === c)); });
+      setKind(state.kind);
+    });
+  });
+
+  /* ---------- feedback ---------- */
+  function syncFbKind() {
+    var k = $('fbKind').value;
+    $('fbGearWrap').style.display = (k === 'pedal_request' || k === 'amp_request') ? '' : 'none';
+  }
+  $('fbKind').addEventListener('change', syncFbKind);
+  $('fbForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if ($('fbHp').value) return; // bot
+    var kind = $('fbKind').value, gear = $('fbGear').value.trim(), msg = $('fbMsg').value.trim();
+    var email = state.user ? state.user.email : $('fbEmail').value.trim();
+    if ((kind === 'pedal_request' || kind === 'amp_request') && !gear) { toast('Which pedal or amp?', true); $('fbGear').focus(); return; }
+    if (!msg && !gear) { toast('Add a message first', true); $('fbMsg').focus(); return; }
+    if (!sb) { toast('Feedback is not switched on yet (Supabase not configured)', true); return; }
+    var last = ls('btlab_fb_last') || 0;
+    if (Date.now() - last < 30000) { toast('Thanks! Give it 30 seconds before sending another.', true); return; }
+    var btn = $('fbSend'); btn.disabled = true;
+    sb.from('tone_lab_feedback').insert({
+      kind: kind, gear: gear || null, message: msg || null, email: email || null,
+      device_id: state.device.id, page_url: String(location.href).slice(0, 500)
+    }).then(function (r) {
+      if (r.error) throw r.error;
+      ls('btlab_fb_last', Date.now());
+      $('fbGear').value = ''; $('fbMsg').value = '';
+      toast('Thanks - got it!');
+    }).catch(function (err) { toast('Could not send: ' + (err.message || err), true); })
+      .then(function () { btn.disabled = false; });
+  });
+
+  /* ==========================================================
+     AUTH (Supabase) - only active when CONFIG is filled in
+     ========================================================== */
+  var authMode = 'signin'; // signin | signup | reset
+  function renderAcct() {
+    var a = $('acct'); a.innerHTML = '';
+    $('fbEmailWrap').style.display = state.user ? 'none' : '';
+    if (!sb) { a.appendChild(el('span', { class: 'note' }, 'Presets save in this browser')); return; }
+    if (state.user) {
+      a.appendChild(el('span', { class: 'who' }, state.user.email));
+      var out = el('button', { class: 'btn sm', type: 'button' }, 'SIGN OUT');
+      out.addEventListener('click', function () { sb.auth.signOut(); });
+      a.appendChild(out);
+    } else {
+      var inn = el('button', { class: 'btn sm go', type: 'button' }, 'SIGN IN / JOIN');
+      inn.addEventListener('click', function () { openAuth('signin'); });
+      a.appendChild(inn);
+    }
+  }
+  function openAuth(mode) {
+    authMode = mode;
+    var signup = mode === 'signup', reset = mode === 'reset';
+    $('authTitle').textContent = reset ? 'SET NEW PASSWORD' : signup ? 'CREATE ACCOUNT' : 'SIGN IN';
+    $('authHelp').textContent = reset ? 'Choose a new password for your account.' : 'Save your presets to your account and recall them on any device.';
+    $('authGo').textContent = reset ? 'SAVE PASSWORD' : signup ? 'CREATE ACCOUNT' : 'SIGN IN';
+    $('authSwap').textContent = signup ? 'Have an account? Sign in' : 'New here? Create an account';
+    $('authEmail').style.display = reset ? 'none' : '';
+    $('authPass').setAttribute('autocomplete', signup || reset ? 'new-password' : 'current-password');
+    ['authSwap', 'authForgot', 'authMagic'].forEach(function (id) { $(id).style.display = reset ? 'none' : ''; });
+    $('authModal').classList.add('open');
+    (reset ? $('authPass') : $('authEmail')).focus();
+  }
+  function closeAuth() { $('authModal').classList.remove('open'); $('authPass').value = ''; }
+  function redirectUrl() { return CONFIG.REDIRECT_URL || (location.origin + location.pathname); }
+
+  $('authClose').addEventListener('click', closeAuth);
+  $('authModal').addEventListener('click', function (e) { if (e.target === this) closeAuth(); });
+  $('authSwap').addEventListener('click', function () { openAuth(authMode === 'signup' ? 'signin' : 'signup'); });
+  $('authForgot').addEventListener('click', function () {
+    var email = $('authEmail').value.trim(); if (!email) { toast('Type your email first', true); return; }
+    sb.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl() }).then(function (r) {
+      if (r.error) throw r.error; toast('Check your email for a reset link');
+    }).catch(function (e) { toast(e.message, true); });
+  });
+  $('authMagic').addEventListener('click', function () {
+    var email = $('authEmail').value.trim(); if (!email) { toast('Type your email first', true); return; }
+    sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: redirectUrl() } }).then(function (r) {
+      if (r.error) throw r.error; toast('Sign-in link sent - check your email'); closeAuth();
+    }).catch(function (e) { toast(e.message, true); });
+  });
+  $('authForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = $('authEmail').value.trim(), pass = $('authPass').value, p;
+    if (authMode !== 'reset' && !email) { toast('Email required', true); return; }
+    if (pass.length < 8) { toast('Password needs at least 8 characters', true); return; }
+    if (authMode === 'reset') p = sb.auth.updateUser({ password: pass }).then(function (r) { if (r.error) throw r.error; toast('Password updated'); closeAuth(); });
+    else if (authMode === 'signup') p = sb.auth.signUp({ email: email, password: pass, options: { emailRedirectTo: redirectUrl() } }).then(function (r) {
+      if (r.error) throw r.error;
+      if (r.data && r.data.session) { toast('Welcome!'); } else { toast('Check your email to confirm your account'); }
+      closeAuth();
+    });
+    else p = sb.auth.signInWithPassword({ email: email, password: pass }).then(function (r) { if (r.error) throw r.error; closeAuth(); });
+    $('authGo').disabled = true;
+    p.catch(function (err) { toast(err.message || 'Something went wrong', true); }).then(function () { $('authGo').disabled = false; });
+  });
+
+  function renderImportBanner() {
+    var box = $('importBanner'); box.innerHTML = '';
+    var n = LocalStore.count();
+    if (!state.user || !n) return;
+    var b = el('div', { class: 'banner' });
+    b.appendChild(el('span', null, 'You have ' + n + ' preset' + (n > 1 ? 's' : '') + ' saved in this browser. Copy them into your account?'));
+    var row = el('div', { class: 'row' });
+    var yes = el('button', { class: 'btn sm go', type: 'button' }, 'COPY TO ACCOUNT');
+    var no = el('button', { class: 'btn sm ghost', type: 'button' }, 'NOT NOW');
+    yes.addEventListener('click', function () {
+      yes.disabled = true;
+      var all = LocalStore._all(), rows = [];
+      Object.keys(all).forEach(function (dev) { all[dev].forEach(function (p) { rows.push({ user_id: state.user.id, device_id: dev, name: p.name, settings: p.settings, updated_at: p.updated_at }); }); });
+      sb.from('tone_lab_presets').upsert(rows, { onConflict: 'user_id,device_id,name' }).then(function (r) {
+        if (r.error) throw r.error;
+        LocalStore.clear(); toast('Copied ' + rows.length + ' preset' + (rows.length > 1 ? 's' : '') + ' to your account');
+        renderImportBanner(); refreshPresets();
+      }).catch(function (e) { yes.disabled = false; toast(e.message, true); });
+    });
+    no.addEventListener('click', function () { box.innerHTML = ''; });
+    row.appendChild(yes); row.appendChild(no); b.appendChild(row); box.appendChild(b);
+  }
+
+  function loadScript(src) {
+    return new Promise(function (res, rej) { var s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+  }
+  function initAuth() {
+    if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY) return Promise.resolve();
+    var ready = window.supabase && window.supabase.createClient ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2');
+    return ready.then(function () {
+      sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'btlab-auth' }
+      });
+      sb.auth.onAuthStateChange(function (event, session) {
+        var was = state.user && state.user.id;
+        state.user = session ? session.user : null;
+        renderAcct();
+        if (event === 'PASSWORD_RECOVERY') openAuth('reset');
+        if ((state.user && state.user.id) !== was) { renderImportBanner(); refreshPresets(); }
+      });
+      return sb.auth.getSession().then(function (r) { state.user = r.data.session ? r.data.session.user : null; });
+    }).catch(function () { sb = null; toast('Could not reach the login service - saving in this browser for now', true); });
+  }
+
+  /* ==========================================================
+     BOOT
+     ========================================================== */
+  $('yr').textContent = new Date().getFullYear();
+  syncFbKind();
+  var wanted = (location.hash || '').slice(1) || ls('btlab_last_device');
+  var start = DEVICES.filter(function (d) { return d.id === wanted; })[0] || DEVICES[0];
+  state.device = start;
+  state.kind = start.kind;
+  root.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.kind === state.kind)); });
+  renderDeviceList(); renderDevice(); renderAcct();
+  initAuth().then(function () { renderAcct(); renderImportBanner(); return refreshPresets(); });
+})();
+</script>
+</div>
+</body>
+</html>
