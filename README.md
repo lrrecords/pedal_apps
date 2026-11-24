@@ -83,6 +83,17 @@ Add one object to the `DEVICES` array in `index.html`. The helpers make it short
 
 Never rename a control `id` or device `id` after release. Saved presets refer to them.
 
+## Licence
+
+Code is released under the [MIT License](LICENSE): reuse it freely, keep the copyright notice.
+The "Bent Tree" / "LRRecords" names and logos are not covered by the licence.
+
+**Live:** https://lrrecords.com.au/tone-lab
+
+## Contributing
+
+Want a pedal or amp added? Use the request form on the live page, or open a pull request adding it to `DEVICES` (see "Adding a pedal or amp" above).
+
 ## Legal
 
 Product names are trademarks of their owners and are used only to say which gear the settings are for.
