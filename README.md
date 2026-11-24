@@ -39,7 +39,7 @@ Every device has 5–8 factory presets ("Tone Lab presets"). These are our own s
 
 ## Setup (one time, ~10 minutes)
 
-1. **Supabase project.** Use an existing project (Artist-Pages is fine, because all tables are prefixed `tone_lab_`) or create a free one.
+1. **Supabase project.** Tone Lab has its own project, **Bent Tree Tone Lab** (`acovoiswlinlrauegqcz`, Sydney), already set up and wired into `index.html`. Keep it separate from Artist-Pages / Ledger: anyone can sign up here, and those apps trust any signed-in user.
 2. **Run the schema.** In the SQL Editor, paste `supabase/schema.sql` and click Run.
 3. **Auth settings.** Go to Authentication › URL Configuration:
    - Site URL: the page the app lives on, e.g. `https://lrrecords.com.au/tone-lab`
